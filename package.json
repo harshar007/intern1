@@ -16,7 +16,7 @@
     "lint": "eslint",
     "db:generate": "pnpm dlx prisma generate --schema ./prisma/schema/schema.prisma",
     "db:push": "pnpm dlx prisma db push --schema ./prisma/schema/schema.prisma",
-    "db:studio": "pnpm dlx prisma studio  ./prisma/schema/schema.prisma",
+    "db:studio": "pnpm dlx prisma studio --schema ./prisma/schema/schema.prisma",
     "auth:generate": "pnpm dlx @better-auth/cli generate --config ./src/modules/server/auth-provider/auth.ts --output ./prisma/schema/schema.prisma",
     "deps": "pnpm dlx madge src/modules --circular --extensions ts",
     "deps:graph": "madge src/modules --image deps.svg --extensions ts,tsx",
