@@ -4,6 +4,6 @@ import { TReorderMenuNodeValidationSchema } from "@/modules/entities/schemas/adm
 export async function reorderMenuNodeUseCase(
   payload: TReorderMenuNodeValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IAppsService");
-  return await service.reorderMenuNode(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.reorderMenuNode(payload);
 }

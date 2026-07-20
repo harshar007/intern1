@@ -7,6 +7,6 @@ import {
 export async function createOrgRoleUseCase(
   payload: TCreateOrgRoleValidationSchema,
 ): Promise<TOrgRoleSchema> {
-  const service = getInjection("IOrganizationsService");
-  return service.createOrgRole(payload);
+  const repository = getInjection("IOrganizationsRepository");
+  return repository.createOrgRole(payload);
 }

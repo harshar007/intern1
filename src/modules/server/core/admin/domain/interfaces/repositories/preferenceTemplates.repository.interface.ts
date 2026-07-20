@@ -6,7 +6,7 @@ import {
   TDeletePreferenceTemplateValidationSchema,
 } from "@/modules/entities/schemas/admin/preference-templates/preference-template.schema";
 
-export interface IPreferenceTemplatesService {
+export interface IPreferenceTemplatesRepository {
   listPreferenceTemplates(): Promise<TListPreferenceTemplatesResponseSchema>;
   createPreferenceTemplate(
     payload: TCreatePreferenceTemplateValidationSchema,

@@ -11,7 +11,7 @@ import {
   TDeleteResourceActionValidationSchema,
 } from "@/modules/entities/schemas/admin/resources/resources.schema";
 
-export interface IResourcesService {
+export interface IResourcesRepository {
   // Resource operations
   listResources(): Promise<TListResourcesResponseSchema>;
   createResource(

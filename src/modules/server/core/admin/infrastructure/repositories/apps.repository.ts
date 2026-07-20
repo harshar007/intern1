@@ -1,5 +1,5 @@
 /**
- * @module admin/apps.service
+ * @module admin/apps.repository
  * @description Manages navigation apps and hierarchical menu nodes.
  *              Apps represent top-level application shells in the sidebar.
  *              Menu nodes are the actual navigation items organized in
@@ -11,7 +11,7 @@
 
 import { randomUUID } from "crypto";
 import { prisma } from "../../../../../../../prisma/db";
-import { IAppsService } from "../../domain/interfaces/apps.service.interface";
+import { IAppsRepository } from "../../domain/interfaces/repositories/apps.repository.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import {
@@ -34,7 +34,7 @@ import {
   TListActionsResponseSchema,
 } from "@/modules/entities/schemas/admin/apps/apps.schema";
 
-export class AppsService implements IAppsService {
+export class AppsRepository implements IAppsRepository {
   // ------------------------------------------------------------------ //
   // App operations
   // ------------------------------------------------------------------ //
@@ -44,7 +44,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.listApps",
+      name: "AppsRepository.listApps",
       startTimeMs,
       context: { operationId },
     });
@@ -68,7 +68,7 @@ export class AppsService implements IAppsService {
       const data = await ListAppsResponseSchema.parseAsync({ apps: mapped });
 
       logOperation("success", {
-        name: "AppsService.listApps",
+        name: "AppsRepository.listApps",
         startTimeMs,
         data,
         context: { operationId },
@@ -77,7 +77,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.listApps",
+        name: "AppsRepository.listApps",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -92,7 +92,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.createApp",
+      name: "AppsRepository.createApp",
       startTimeMs,
       context: { operationId },
     });
@@ -113,7 +113,7 @@ export class AppsService implements IAppsService {
       const data = await AppSchema.parseAsync(app);
 
       logOperation("success", {
-        name: "AppsService.createApp",
+        name: "AppsRepository.createApp",
         startTimeMs,
         data,
         context: { operationId },
@@ -122,7 +122,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.createApp",
+        name: "AppsRepository.createApp",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -137,7 +137,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.updateApp",
+      name: "AppsRepository.updateApp",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -160,7 +160,7 @@ export class AppsService implements IAppsService {
       const data = await AppSchema.parseAsync(app);
 
       logOperation("success", {
-        name: "AppsService.updateApp",
+        name: "AppsRepository.updateApp",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -169,7 +169,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.updateApp",
+        name: "AppsRepository.updateApp",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -186,7 +186,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.deleteApp",
+      name: "AppsRepository.deleteApp",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -198,7 +198,7 @@ export class AppsService implements IAppsService {
       });
       const data = { success: true };
       logOperation("success", {
-        name: "AppsService.deleteApp",
+        name: "AppsRepository.deleteApp",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -207,7 +207,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.deleteApp",
+        name: "AppsRepository.deleteApp",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -226,7 +226,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.listMenuNodes",
+      name: "AppsRepository.listMenuNodes",
       startTimeMs,
       context: { operationId, appId },
     });
@@ -261,7 +261,7 @@ export class AppsService implements IAppsService {
       });
 
       logOperation("success", {
-        name: "AppsService.listMenuNodes",
+        name: "AppsRepository.listMenuNodes",
         startTimeMs,
         data,
         context: { operationId, appId },
@@ -270,7 +270,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.listMenuNodes",
+        name: "AppsRepository.listMenuNodes",
         startTimeMs,
         err: error,
         context: { operationId, appId },
@@ -286,7 +286,7 @@ export class AppsService implements IAppsService {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
     logOperation("start", {
-      name: "AppsService.createMenuNode",
+      name: "AppsRepository.createMenuNode",
       startTimeMs,
       context: { operationId, appId: payload.appId },
     });
@@ -316,7 +316,7 @@ export class AppsService implements IAppsService {
         parentLabel: node.parent?.label ?? null,
       });
       logOperation("success", {
-        name: "AppsService.createMenuNode",
+        name: "AppsRepository.createMenuNode",
         startTimeMs,
         data,
         context: { operationId, appId: payload.appId },
@@ -324,7 +324,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.createMenuNode",
+        name: "AppsRepository.createMenuNode",
         startTimeMs,
         err: error,
         context: { operationId, appId: payload.appId },
@@ -339,7 +339,7 @@ export class AppsService implements IAppsService {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
     logOperation("start", {
-      name: "AppsService.updateMenuNode",
+      name: "AppsRepository.updateMenuNode",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -369,7 +369,7 @@ export class AppsService implements IAppsService {
         parentLabel: node.parent?.label ?? null,
       });
       logOperation("success", {
-        name: "AppsService.updateMenuNode",
+        name: "AppsRepository.updateMenuNode",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -377,7 +377,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.updateMenuNode",
+        name: "AppsRepository.updateMenuNode",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -392,7 +392,7 @@ export class AppsService implements IAppsService {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
     logOperation("start", {
-      name: "AppsService.deleteMenuNode",
+      name: "AppsRepository.deleteMenuNode",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -400,7 +400,7 @@ export class AppsService implements IAppsService {
       await prisma.appMenuNode.delete({ where: { id: payload.id } });
       const data = { success: true };
       logOperation("success", {
-        name: "AppsService.deleteMenuNode",
+        name: "AppsRepository.deleteMenuNode",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -408,7 +408,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.deleteMenuNode",
+        name: "AppsRepository.deleteMenuNode",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -423,7 +423,7 @@ export class AppsService implements IAppsService {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
     logOperation("start", {
-      name: "AppsService.reorderMenuNode",
+      name: "AppsRepository.reorderMenuNode",
       startTimeMs,
       context: {
         operationId,
@@ -458,7 +458,7 @@ export class AppsService implements IAppsService {
 
       if (!sibling) {
         logOperation("success", {
-          name: "AppsService.reorderMenuNode",
+          name: "AppsRepository.reorderMenuNode",
           startTimeMs,
           data: { success: true },
           context: {
@@ -483,7 +483,7 @@ export class AppsService implements IAppsService {
 
       const data = { success: true };
       logOperation("success", {
-        name: "AppsService.reorderMenuNode",
+        name: "AppsRepository.reorderMenuNode",
         startTimeMs,
         data,
         context: { operationId, nodeId: payload.nodeId },
@@ -491,7 +491,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.reorderMenuNode",
+        name: "AppsRepository.reorderMenuNode",
         startTimeMs,
         err: error,
         context: { operationId, nodeId: payload.nodeId },
@@ -509,7 +509,7 @@ export class AppsService implements IAppsService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "AppsService.listActions",
+      name: "AppsRepository.listActions",
       startTimeMs,
       context: { operationId },
     });
@@ -534,7 +534,7 @@ export class AppsService implements IAppsService {
       });
 
       logOperation("success", {
-        name: "AppsService.listActions",
+        name: "AppsRepository.listActions",
         startTimeMs,
         data,
         context: { operationId },
@@ -543,7 +543,7 @@ export class AppsService implements IAppsService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "AppsService.listActions",
+        name: "AppsRepository.listActions",
         startTimeMs,
         err: error,
         context: { operationId },

@@ -4,6 +4,6 @@ import { TDeleteAppValidationSchema } from "@/modules/entities/schemas/admin/app
 export async function deleteAppUseCase(
   payload: TDeleteAppValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IAppsService");
-  return await service.deleteApp(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.deleteApp(payload);
 }

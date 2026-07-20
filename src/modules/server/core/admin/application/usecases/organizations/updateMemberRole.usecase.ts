@@ -4,6 +4,6 @@ import { TUpdateMemberRoleValidationSchema } from "@/modules/entities/schemas/ad
 export async function updateMemberRoleUseCase(
   payload: TUpdateMemberRoleValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IOrganizationsService");
-  return service.updateMemberRole(payload);
+  const repository = getInjection("IOrganizationsRepository");
+  return repository.updateMemberRole(payload);
 }

@@ -7,6 +7,6 @@ import { getInjection } from "@/modules/server/di/container";
 export async function updatePreferenceTemplateUseCase(
   payload: TUpdatePreferenceTemplateValidationSchema,
 ): Promise<TPreferenceTemplateSchema> {
-  const service = getInjection("IPreferenceTemplatesService");
-  return await service.updatePreferenceTemplate(payload);
+  const repository = getInjection("IPreferenceTemplatesRepository");
+  return await repository.updatePreferenceTemplate(payload);
 }

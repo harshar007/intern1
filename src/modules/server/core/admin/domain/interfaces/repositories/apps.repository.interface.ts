@@ -13,7 +13,7 @@ import {
   TListActionsResponseSchema,
 } from "@/modules/entities/schemas/admin/apps/apps.schema";
 
-export interface IAppsService {
+export interface IAppsRepository {
   // App operations
   listApps(): Promise<TListAppsResponseSchema>;
   createApp(payload: TCreateAppValidationSchema): Promise<TAppSchema>;

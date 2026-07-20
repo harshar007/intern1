@@ -1,5 +1,5 @@
 /**
- * @module admin/usercontext.service
+ * @module admin/usercontext.repository
  * @description Manages per-user context: which org and which role a user
  *              currently has active. This determines what navigation menus
  *              they see, what permissions they have, and which org's data
@@ -10,7 +10,7 @@
 
 import { randomUUID } from "crypto";
 import { prisma } from "../../../../../../../prisma/db";
-import { IUserContextService } from "../../domain/interfaces/usercontext.service.interface";
+import { IUserContextRepository } from "../../domain/interfaces/repositories/usercontext.repository.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import {
@@ -20,13 +20,13 @@ import {
   TSetUserContextValidationSchema,
 } from "@/modules/entities/schemas/admin/user-context/user-context.schema";
 
-export class UserContextService implements IUserContextService {
+export class UserContextRepository implements IUserContextRepository {
   async listUserContexts(): Promise<TListUserContextsResponseSchema> {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "UserContextService.listUserContexts",
+      name: "UserContextRepository.listUserContexts",
       startTimeMs,
       context: { operationId },
     });
@@ -86,7 +86,7 @@ export class UserContextService implements IUserContextService {
       }));
 
       logOperation("success", {
-        name: "UserContextService.listUserContexts",
+        name: "UserContextRepository.listUserContexts",
         startTimeMs,
         context: { operationId, count: items.length },
       });
@@ -94,7 +94,7 @@ export class UserContextService implements IUserContextService {
       return { items };
     } catch (error) {
       logOperation("error", {
-        name: "UserContextService.listUserContexts",
+        name: "UserContextRepository.listUserContexts",
         startTimeMs,
         context: { operationId },
         err: error,
@@ -110,7 +110,7 @@ export class UserContextService implements IUserContextService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "UserContextService.getUserOrgMemberships",
+      name: "UserContextRepository.getUserOrgMemberships",
       startTimeMs,
       context: { operationId, userId },
     });
@@ -131,7 +131,7 @@ export class UserContextService implements IUserContextService {
       }));
 
       logOperation("success", {
-        name: "UserContextService.getUserOrgMemberships",
+        name: "UserContextRepository.getUserOrgMemberships",
         startTimeMs,
         context: { operationId, userId, count: memberships.length },
       });
@@ -139,7 +139,7 @@ export class UserContextService implements IUserContextService {
       return { memberships };
     } catch (error) {
       logOperation("error", {
-        name: "UserContextService.getUserOrgMemberships",
+        name: "UserContextRepository.getUserOrgMemberships",
         startTimeMs,
         context: { operationId, userId },
         err: error,
@@ -155,7 +155,7 @@ export class UserContextService implements IUserContextService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "UserContextService.getOrgRolesForContext",
+      name: "UserContextRepository.getOrgRolesForContext",
       startTimeMs,
       context: { operationId, organizationId },
     });
@@ -170,7 +170,7 @@ export class UserContextService implements IUserContextService {
       const roles = rows.map((r) => ({ id: r.id, role: r.role }));
 
       logOperation("success", {
-        name: "UserContextService.getOrgRolesForContext",
+        name: "UserContextRepository.getOrgRolesForContext",
         startTimeMs,
         context: { operationId, organizationId, count: roles.length },
       });
@@ -178,7 +178,7 @@ export class UserContextService implements IUserContextService {
       return { roles };
     } catch (error) {
       logOperation("error", {
-        name: "UserContextService.getOrgRolesForContext",
+        name: "UserContextRepository.getOrgRolesForContext",
         startTimeMs,
         context: { operationId, organizationId },
         err: error,
@@ -194,7 +194,7 @@ export class UserContextService implements IUserContextService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "UserContextService.setUserContext",
+      name: "UserContextRepository.setUserContext",
       startTimeMs,
       context: { operationId, userId: payload.userId },
     });
@@ -214,7 +214,7 @@ export class UserContextService implements IUserContextService {
       });
 
       logOperation("success", {
-        name: "UserContextService.setUserContext",
+        name: "UserContextRepository.setUserContext",
         startTimeMs,
         context: { operationId, userId: payload.userId },
       });
@@ -222,7 +222,7 @@ export class UserContextService implements IUserContextService {
       return { success: true };
     } catch (error) {
       logOperation("error", {
-        name: "UserContextService.setUserContext",
+        name: "UserContextRepository.setUserContext",
         startTimeMs,
         context: { operationId, userId: payload.userId },
         err: error,

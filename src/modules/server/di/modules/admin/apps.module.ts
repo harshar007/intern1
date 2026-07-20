@@ -1,7 +1,7 @@
 import { Container } from "@evyweb/ioctopus";
 import { DI_SYMBOLS } from "../../types";
-import { AppsService } from "@/modules/server/core/admin/infrastructure/services/apps.service";
+import { AppsRepository } from "@/modules/server/core/admin/infrastructure/repositories/apps.repository";
 
 export function registerAppsModule(container: Container) {
-  container.bind(DI_SYMBOLS.IAppsService).toClass(AppsService);
+  container.bind(DI_SYMBOLS.IAppsRepository).toClass(AppsRepository);
 }

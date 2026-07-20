@@ -4,6 +4,6 @@ import { TGetOrgRolesForContextResponseSchema } from "@/modules/entities/schemas
 export async function getOrgRolesForContextUseCase(
   organizationId: string,
 ): Promise<TGetOrgRolesForContextResponseSchema> {
-  const service = getInjection("IUserContextService");
-  return service.getOrgRolesForContext(organizationId);
+  const repository = getInjection("IUserContextRepository");
+  return repository.getOrgRolesForContext(organizationId);
 }

@@ -1,9 +1,9 @@
 /**
  * @module admin/apikeys.service
- * @description Manages API keys (prefix: `drgodly_`).
- *              - List/create: uses Better Auth's `auth.api` for proper key generation/hashing.
- *              - Delete/deleteExpired: uses Prisma for direct DB operations.
- *              - Update: uses Better Auth API for permission/metadata changes.
+ * @description Manages API keys (prefix: `drgodly_`) via Better Auth's `auth.api`
+ *              — needed for proper key generation/hashing and permission/metadata
+ *              changes. Prisma-only operations (list/delete) live in
+ *              `ApiKeyRepository` instead.
  *              Admin calls omit session headers — they are trusted server operations.
  * @category Infrastructure
  * @layer Infrastructure
@@ -11,77 +11,20 @@
 
 import { randomUUID } from "crypto";
 import { auth } from "@/modules/server/auth-provider/auth";
-import { prisma } from "../../../../../../../prisma/db";
-import { IApiKeyService } from "../../domain/interfaces/apikeys.service.interface";
+import { IApiKeyService } from "../../domain/interfaces/services/apikeys.service.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { mapBetterAuthError } from "@/modules/server/shared/errors/mappers/mapBetterAuthError";
-import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import {
   ApiKeySchema,
   ApiKeyCreatedSchema,
-  ListApiKeysResponseSchema,
-  TListApiKeysResponseSchema,
-  TListApiKeysQuerySchema,
   TApiKeySchema,
   TApiKeyCreatedSchema,
   TCreateApiKeyValidationSchema,
   TUpdateApiKeyValidationSchema,
-  TDeleteApiKeyValidationSchema,
   TDeleteExpiredApiKeysValidationSchema,
 } from "@/modules/entities/schemas/admin/api-keys/api-keys.schema";
 
 export class ApiKeyService implements IApiKeyService {
-  // ---------------------------------------------------------------- //
-  // LIST — Prisma direct (no session needed for admin view)
-  // ---------------------------------------------------------------- //
-  async listApiKeys(
-    query: TListApiKeysQuerySchema,
-  ): Promise<TListApiKeysResponseSchema> {
-    const startTimeMs = Date.now();
-    const operationId = randomUUID();
-    logOperation("start", {
-      name: "ApiKeyService.listApiKeys",
-      startTimeMs,
-      context: { operationId, ...query },
-    });
-    try {
-      const where = {
-        ...(query.userId && { referenceId: query.userId }),
-        ...(query.organizationId && { referenceId: query.organizationId }),
-        ...(query.configId && { configId: query.configId }),
-      };
-
-      const [rows, total] = await Promise.all([
-        prisma.apikey.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          take: query.limit,
-          skip: query.offset,
-        }),
-        prisma.apikey.count({ where }),
-      ]);
-
-      const apiKeys = rows.map((k) => ApiKeySchema.parse(k));
-      const data = ListApiKeysResponseSchema.parse({ apiKeys, total });
-
-      logOperation("success", {
-        name: "ApiKeyService.listApiKeys",
-        startTimeMs,
-        data: { count: data.apiKeys.length, total: data.total },
-        context: { operationId },
-      });
-      return data;
-    } catch (error) {
-      logOperation("error", {
-        name: "ApiKeyService.listApiKeys",
-        startTimeMs,
-        err: error,
-        context: { operationId },
-      });
-      throw new InfrastructureError("Failed to list API keys", error);
-    }
-  }
-
   // ---------------------------------------------------------------- //
   // CREATE — auth.api (needed to generate + hash the raw key)
   // No headers = trusted server call; allows server-only props like userId
@@ -192,39 +135,6 @@ export class ApiKeyService implements IApiKeyService {
         context: { operationId },
       });
       mapBetterAuthError(error, "Failed to update API key");
-    }
-  }
-
-  // ---------------------------------------------------------------- //
-  // DELETE — Prisma direct
-  // ---------------------------------------------------------------- //
-  async deleteApiKey(
-    payload: TDeleteApiKeyValidationSchema,
-  ): Promise<{ success: boolean }> {
-    const startTimeMs = Date.now();
-    const operationId = randomUUID();
-    logOperation("start", {
-      name: "ApiKeyService.deleteApiKey",
-      startTimeMs,
-      context: { operationId, keyId: payload.keyId },
-    });
-    try {
-      await prisma.apikey.delete({ where: { id: payload.keyId } });
-
-      logOperation("success", {
-        name: "ApiKeyService.deleteApiKey",
-        startTimeMs,
-        context: { operationId },
-      });
-      return { success: true };
-    } catch (error) {
-      logOperation("error", {
-        name: "ApiKeyService.deleteApiKey",
-        startTimeMs,
-        err: error,
-        context: { operationId },
-      });
-      throw new InfrastructureError("Failed to delete API key", error);
     }
   }
 

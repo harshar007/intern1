@@ -4,6 +4,6 @@ export async function getOrgRoleRedirectsUseCase(
   userId: string,
   organizationId: string,
 ): Promise<Record<string, string>> {
-  const service = getInjection("IOrganizationsService");
-  return service.getOrgRoleRedirects(userId, organizationId);
+  const repository = getInjection("IOrganizationsRepository");
+  return repository.getOrgRoleRedirects(userId, organizationId);
 }

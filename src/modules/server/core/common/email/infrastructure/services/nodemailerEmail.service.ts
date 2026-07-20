@@ -8,7 +8,7 @@
  */
 
 import nodemailer from "nodemailer"
-import { IEmailService } from "../../domain/interfaces/email.service.interface"
+import { IEmailService } from "../../domain/interfaces/services/email.service.interface"
 import { TSendEmailPayload } from "@/modules/entities/types/email"
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError"
 

@@ -4,6 +4,6 @@ import { TGetUserOrgMembershipsResponseSchema } from "@/modules/entities/schemas
 export async function getUserOrgMembershipsUseCase(
   userId: string,
 ): Promise<TGetUserOrgMembershipsResponseSchema> {
-  const service = getInjection("IUserContextService");
-  return service.getUserOrgMemberships(userId);
+  const repository = getInjection("IUserContextRepository");
+  return repository.getUserOrgMemberships(userId);
 }
