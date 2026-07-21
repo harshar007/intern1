@@ -5,6 +5,6 @@ import {
 } from "@/modules/entities/schemas/admin/apps/apps.schema";
 
 export async function updateAppUseCase(payload: TUpdateAppValidationSchema): Promise<TAppSchema> {
-  const service = getInjection("IAppsService");
-  return await service.updateApp(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.updateApp(payload);
 }

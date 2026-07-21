@@ -41,7 +41,7 @@ import {
   TVerifyTOTPDtoSchema,
 } from "@/modules/entities/schemas/auth";
 import { auth } from "@/modules/server/auth-provider/auth";
-import { IAuthService } from "../../domain/interfaces/auth.service.interface";
+import { IAuthService } from "../../domain/interfaces/services/auth.service.interface";
 import { mapBetterAuthError } from "@/modules/server/shared/errors/mappers/mapBetterAuthError";
 import { headers } from "next/headers";
 import {

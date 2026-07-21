@@ -1,5 +1,5 @@
 /**
- * @module settings/userPreference.service
+ * @module settings/userPreference.repository
  * @description Manages per-user locale/format preferences (date format, time format,
  *              currency, number format, week start). Uses Prisma upsert for
  *              create-on-first-access pattern. Returns null when no preference exists.
@@ -9,7 +9,7 @@
 
 import { randomUUID } from "crypto";
 import { prisma } from "../../../../../../../prisma/db";
-import { IUserPreferenceService } from "../../domain/interfaces/userPreference.service.interface";
+import { IUserPreferenceRepository } from "../../domain/interfaces/repositories/userPreference.repository.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import {
@@ -18,7 +18,7 @@ import {
   UserPreferenceSchema,
 } from "@/modules/entities/schemas/settings/preference/preference.schema";
 
-export class UserPreferenceService implements IUserPreferenceService {
+export class UserPreferenceRepository implements IUserPreferenceRepository {
   async getUserPreference(
     userId: string,
   ): Promise<TUserPreferenceSchema | null> {
@@ -26,7 +26,7 @@ export class UserPreferenceService implements IUserPreferenceService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "UserPreferenceService.getUserPreference",
+      name: "UserPreferenceRepository.getUserPreference",
       startTimeMs,
       context: { operationId, userId },
     });
@@ -38,7 +38,7 @@ export class UserPreferenceService implements IUserPreferenceService {
 
       if (!row) {
         logOperation("success", {
-          name: "UserPreferenceService.getUserPreference",
+          name: "UserPreferenceRepository.getUserPreference",
           startTimeMs,
           data: null,
           context: { operationId, userId, note: "no record found" },
@@ -49,7 +49,7 @@ export class UserPreferenceService implements IUserPreferenceService {
       const data = await UserPreferenceSchema.parseAsync(row);
 
       logOperation("success", {
-        name: "UserPreferenceService.getUserPreference",
+        name: "UserPreferenceRepository.getUserPreference",
         startTimeMs,
         data,
         context: { operationId, userId },
@@ -58,7 +58,7 @@ export class UserPreferenceService implements IUserPreferenceService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "UserPreferenceService.getUserPreference",
+        name: "UserPreferenceRepository.getUserPreference",
         startTimeMs,
         err: error,
         context: { operationId, userId },
@@ -75,7 +75,7 @@ export class UserPreferenceService implements IUserPreferenceService {
     const { userId, ...fields } = payload;
 
     logOperation("start", {
-      name: "UserPreferenceService.upsertUserPreference",
+      name: "UserPreferenceRepository.upsertUserPreference",
       startTimeMs,
       context: { operationId, userId },
     });
@@ -94,7 +94,7 @@ export class UserPreferenceService implements IUserPreferenceService {
       const data = await UserPreferenceSchema.parseAsync(row);
 
       logOperation("success", {
-        name: "UserPreferenceService.upsertUserPreference",
+        name: "UserPreferenceRepository.upsertUserPreference",
         startTimeMs,
         data,
         context: { operationId, userId },
@@ -103,7 +103,7 @@ export class UserPreferenceService implements IUserPreferenceService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "UserPreferenceService.upsertUserPreference",
+        name: "UserPreferenceRepository.upsertUserPreference",
         startTimeMs,
         err: error,
         context: { operationId, userId },

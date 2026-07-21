@@ -7,6 +7,6 @@ import {
 export async function createMenuNodeUseCase(
   payload: TCreateMenuNodeValidationSchema,
 ): Promise<TMenuNodeSchema> {
-  const service = getInjection("IAppsService");
-  return await service.createMenuNode(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.createMenuNode(payload);
 }

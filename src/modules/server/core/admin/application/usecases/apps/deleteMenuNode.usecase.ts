@@ -4,6 +4,6 @@ import { TDeleteMenuNodeValidationSchema } from "@/modules/entities/schemas/admi
 export async function deleteMenuNodeUseCase(
   payload: TDeleteMenuNodeValidationSchema,
 ): Promise<{ success: true }> {
-  const service = getInjection("IAppsService");
-  return await service.deleteMenuNode(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.deleteMenuNode(payload);
 }

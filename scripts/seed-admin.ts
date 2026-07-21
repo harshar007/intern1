@@ -454,25 +454,42 @@ async function main() {
     where: { organizationId: org.id, role: ORG_ROLE },
   });
 
-  if (existingOrgRole) {
-    await prisma.organizationRole.update({
-      where: { id: existingOrgRole.id },
-      data: { permission: permissionJson },
-    });
-  } else {
-    await prisma.organizationRole.create({
-      data: {
-        id: randomUUID(),
-        organizationId: org.id,
-        role: ORG_ROLE,
-        permission: permissionJson,
-      },
-    });
-  }
+  const orgRole = existingOrgRole
+    ? await prisma.organizationRole.update({
+        where: { id: existingOrgRole.id },
+        data: { permission: permissionJson },
+      })
+    : await prisma.organizationRole.create({
+        data: {
+          id: randomUUID(),
+          organizationId: org.id,
+          role: ORG_ROLE,
+          permission: permissionJson,
+        },
+      });
   console.log(
     `\n  Role "${ORG_ROLE}" granted ${allActions.length} permissions:`,
   );
   console.log(`  ${allActions.map((a) => `${RESOURCE_NAME}:${a}`).join(", ")}`);
+
+  // ── Phase 8: User Context ──────────────────────────────────────────
+  console.log("\n━━━ Phase 8: User Context ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+  await prisma.userContext.upsert({
+    where: { userId },
+    create: {
+      userId,
+      activeOrganizationId: org.id,
+      activeRoleId: orgRole.id,
+    },
+    update: {
+      activeOrganizationId: org.id,
+      activeRoleId: orgRole.id,
+    },
+  });
+  console.log(
+    `\n  UserContext set → org "${org.name}" (${org.id}), role "${ORG_ROLE}" (${orgRole.id})`,
+  );
 
   // ── Summary ───────────────────────────────────────────────────────
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -484,6 +501,7 @@ async function main() {
     "  Orgs:     ",
     `${ORG_NAME} (role: ${ORG_ROLE}), drgodly (role: owner)`,
   );
+  console.log("  Context:  ", `active org=${ORG_NAME}, active role=${ORG_ROLE}`);
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 }
 

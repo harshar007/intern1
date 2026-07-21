@@ -5,6 +5,6 @@ import {
 } from "@/modules/entities/schemas/admin/apps/apps.schema";
 
 export async function createAppUseCase(payload: TCreateAppValidationSchema): Promise<TAppSchema> {
-  const service = getInjection("IAppsService");
-  return await service.createApp(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.createApp(payload);
 }

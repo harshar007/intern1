@@ -1,9 +1,9 @@
 import { Container } from "@evyweb/ioctopus";
 import { DI_SYMBOLS } from "../../types";
-import { UserPreferenceService } from "@/modules/server/core/settings/infrastructure/services/userPreference.service";
+import { UserPreferenceRepository } from "@/modules/server/core/settings/infrastructure/repositories/userPreference.repository";
 
 export function registerUserPreferenceModule(container: Container) {
   container
-    .bind(DI_SYMBOLS.IUserPreferenceService)
-    .toClass(UserPreferenceService);
+    .bind(DI_SYMBOLS.IUserPreferenceRepository)
+    .toClass(UserPreferenceRepository);
 }

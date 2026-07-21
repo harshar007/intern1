@@ -4,5 +4,5 @@ import { TDeleteApiKeyValidationSchema } from "@/modules/entities/schemas/admin/
 export async function deleteApiKeyUseCase(
   payload: TDeleteApiKeyValidationSchema,
 ): Promise<{ success: boolean }> {
-  return getInjection("IApiKeyService").deleteApiKey(payload);
+  return getInjection("IApiKeyRepository").deleteApiKey(payload);
 }

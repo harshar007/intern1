@@ -1,5 +1,5 @@
 /**
- * @module admin/resources.service
+ * @module admin/resources.repository
  * @description Manages RBAC resources (like "patient", "appointment") and
  *              resource actions (like "patient:read", "appointment:create").
  *              These form the permission system that feeds the nav menu
@@ -11,7 +11,7 @@
 
 import { randomUUID } from "crypto";
 import { prisma } from "../../../../../../../prisma/db";
-import { IResourcesService } from "../../domain/interfaces/resources.service.interface";
+import { IResourcesRepository } from "../../domain/interfaces/repositories/resources.repository.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import {
@@ -31,7 +31,7 @@ import {
   TDeleteResourceActionValidationSchema,
 } from "@/modules/entities/schemas/admin/resources/resources.schema";
 
-export class ResourcesService implements IResourcesService {
+export class ResourcesRepository implements IResourcesRepository {
   // ------------------------------------------------------------------ //
   // Resource operations
   // ------------------------------------------------------------------ //
@@ -42,7 +42,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.listResources",
+      name: "ResourcesRepository.listResources",
       startTimeMs,
       context: { operationId },
     });
@@ -67,7 +67,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.listResources",
+        name: "ResourcesRepository.listResources",
         startTimeMs,
         data,
         context: { operationId },
@@ -76,7 +76,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.listResources",
+        name: "ResourcesRepository.listResources",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -94,7 +94,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.createResource",
+      name: "ResourcesRepository.createResource",
       startTimeMs,
       context: { operationId },
     });
@@ -113,7 +113,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.createResource",
+        name: "ResourcesRepository.createResource",
         startTimeMs,
         data,
         context: { operationId },
@@ -122,7 +122,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.createResource",
+        name: "ResourcesRepository.createResource",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -139,7 +139,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.updateResource",
+      name: "ResourcesRepository.updateResource",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -166,7 +166,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.updateResource",
+        name: "ResourcesRepository.updateResource",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -175,7 +175,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.updateResource",
+        name: "ResourcesRepository.updateResource",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -193,7 +193,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.deleteResource",
+      name: "ResourcesRepository.deleteResource",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -203,7 +203,7 @@ export class ResourcesService implements IResourcesService {
       const data = { success: true };
 
       logOperation("success", {
-        name: "ResourcesService.deleteResource",
+        name: "ResourcesRepository.deleteResource",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -212,7 +212,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.deleteResource",
+        name: "ResourcesRepository.deleteResource",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -234,7 +234,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.listResourceActions",
+      name: "ResourcesRepository.listResourceActions",
       startTimeMs,
       context: { operationId, resourceId },
     });
@@ -262,7 +262,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.listResourceActions",
+        name: "ResourcesRepository.listResourceActions",
         startTimeMs,
         data,
         context: { operationId, resourceId },
@@ -271,7 +271,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.listResourceActions",
+        name: "ResourcesRepository.listResourceActions",
         startTimeMs,
         err: error,
         context: { operationId, resourceId },
@@ -288,7 +288,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.createResourceAction",
+      name: "ResourcesRepository.createResourceAction",
       startTimeMs,
       context: { operationId, resourceId: payload.resourceId },
     });
@@ -316,7 +316,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.createResourceAction",
+        name: "ResourcesRepository.createResourceAction",
         startTimeMs,
         data,
         context: { operationId, resourceId: payload.resourceId },
@@ -325,7 +325,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.createResourceAction",
+        name: "ResourcesRepository.createResourceAction",
         startTimeMs,
         err: error,
         context: { operationId, resourceId: payload.resourceId },
@@ -342,7 +342,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.updateResourceAction",
+      name: "ResourcesRepository.updateResourceAction",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -372,7 +372,7 @@ export class ResourcesService implements IResourcesService {
       });
 
       logOperation("success", {
-        name: "ResourcesService.updateResourceAction",
+        name: "ResourcesRepository.updateResourceAction",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -381,7 +381,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.updateResourceAction",
+        name: "ResourcesRepository.updateResourceAction",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },
@@ -398,7 +398,7 @@ export class ResourcesService implements IResourcesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "ResourcesService.deleteResourceAction",
+      name: "ResourcesRepository.deleteResourceAction",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -408,7 +408,7 @@ export class ResourcesService implements IResourcesService {
       const data = { success: true };
 
       logOperation("success", {
-        name: "ResourcesService.deleteResourceAction",
+        name: "ResourcesRepository.deleteResourceAction",
         startTimeMs,
         data,
         context: { operationId, id: payload.id },
@@ -417,7 +417,7 @@ export class ResourcesService implements IResourcesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "ResourcesService.deleteResourceAction",
+        name: "ResourcesRepository.deleteResourceAction",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },

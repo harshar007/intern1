@@ -7,6 +7,6 @@ import { getInjection } from "@/modules/server/di/container";
 export async function updateResourceUseCase(
   payload: TUpdateResourceValidationSchema,
 ): Promise<TResourceSchema> {
-  const service = getInjection("IResourcesService");
-  return await service.updateResource(payload);
+  const repository = getInjection("IResourcesRepository");
+  return await repository.updateResource(payload);
 }

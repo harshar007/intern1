@@ -7,6 +7,6 @@ import {
 export async function updateOrganizationUseCase(
   payload: TUpdateOrganizationValidationSchema,
 ): Promise<TOrganizationSummarySchema> {
-  const service = getInjection("IOrganizationsService");
-  return service.updateOrganization(payload);
+  const repository = getInjection("IOrganizationsRepository");
+  return repository.updateOrganization(payload);
 }

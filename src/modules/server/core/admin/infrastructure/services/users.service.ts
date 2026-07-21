@@ -17,7 +17,7 @@
 import { randomUUID } from "crypto";
 import { headers } from "next/headers";
 import { auth } from "@/modules/server/auth-provider/auth";
-import { IUsersService } from "../../domain/interfaces/users.service.interface";
+import { IUsersService } from "../../domain/interfaces/services/users.service.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { mapBetterAuthError } from "@/modules/server/shared/errors/mappers/mapBetterAuthError";
 import {

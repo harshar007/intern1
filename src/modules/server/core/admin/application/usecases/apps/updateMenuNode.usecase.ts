@@ -7,6 +7,6 @@ import {
 export async function updateMenuNodeUseCase(
   payload: TUpdateMenuNodeValidationSchema,
 ): Promise<TMenuNodeSchema> {
-  const service = getInjection("IAppsService");
-  return await service.updateMenuNode(payload);
+  const repository = getInjection("IAppsRepository");
+  return await repository.updateMenuNode(payload);
 }

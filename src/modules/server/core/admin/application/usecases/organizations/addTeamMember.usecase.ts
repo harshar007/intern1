@@ -4,10 +4,11 @@ import { TAddTeamMemberValidationSchema } from "@/modules/entities/schemas/admin
 export async function addTeamMemberUseCase(payload: TAddTeamMemberValidationSchema): Promise<{ success: boolean }> {
   const usersService = getInjection("IUsersService");
   const orgsService = getInjection("IOrganizationsService");
+  const orgsRepository = getInjection("IOrganizationsRepository");
 
   const user = await usersService.getUserByEmail(payload.email);
 
-  const isMember = await orgsService.isMemberInOrg(payload.organizationId, user.id);
+  const isMember = await orgsRepository.isMemberInOrg(payload.organizationId, user.id);
   if (!isMember) {
     throw new Error(`${payload.email} is not a member of this organization. Add them to the organization first.`);
   }

@@ -1,20 +1,31 @@
-import { IOAuthClientService } from "../core/admin/domain/interfaces/oauthclient.service.interface";
-import { IUsersService } from "../core/admin/domain/interfaces/users.service.interface";
-import { ISessionsService } from "../core/admin/domain/interfaces/sessions.service.interface";
-import { IOrganizationsService } from "../core/admin/domain/interfaces/organizations.service.interface";
-import { IConsentsService } from "../core/admin/domain/interfaces/consents.service.interface";
-import { IAgentAuthService } from "../core/admin/domain/interfaces/agentauth.service.interface";
-import { IAppsService } from "../core/admin/domain/interfaces/apps.service.interface";
-import { IResourcesService } from "../core/admin/domain/interfaces/resources.service.interface";
-import { IApiKeyService } from "../core/admin/domain/interfaces/apikeys.service.interface";
-import { IPreferenceTemplatesService } from "../core/admin/domain/interfaces/preferenceTemplates.service.interface";
-import { IAuthService } from "../core/auth/domain/interfaces/auth.service.interface";
-import { IEmailService } from "../core/common/email/domain/interfaces/email.service.interface";
-import { IUserPreferenceService } from "../core/settings/domain/interfaces/userPreference.service.interface";
-import { IUserContextService } from "../core/admin/domain/interfaces/usercontext.service.interface";
+import { IOAuthClientService } from "../core/admin/domain/interfaces/services/oauthclient.service.interface";
+import { IUsersService } from "../core/admin/domain/interfaces/services/users.service.interface";
+import { ISessionsService } from "../core/admin/domain/interfaces/services/sessions.service.interface";
+import { ISessionsRepository } from "../core/admin/domain/interfaces/repositories/sessions.repository.interface";
+import { IOrganizationsService } from "../core/admin/domain/interfaces/services/organizations.service.interface";
+import { IOrganizationsRepository } from "../core/admin/domain/interfaces/repositories/organizations.repository.interface";
+import { IConsentsService } from "../core/admin/domain/interfaces/services/consents.service.interface";
+import { IAgentAuthService } from "../core/admin/domain/interfaces/services/agentauth.service.interface";
+import { IAppsRepository } from "../core/admin/domain/interfaces/repositories/apps.repository.interface";
+import { IResourcesRepository } from "../core/admin/domain/interfaces/repositories/resources.repository.interface";
+import { IApiKeyService } from "../core/admin/domain/interfaces/services/apikeys.service.interface";
+import { IApiKeyRepository } from "../core/admin/domain/interfaces/repositories/apikeys.repository.interface";
+import { IPreferenceTemplatesRepository } from "../core/admin/domain/interfaces/repositories/preferenceTemplates.repository.interface";
+import { IAuthService } from "../core/auth/domain/interfaces/services/auth.service.interface";
+import { IEmailService } from "../core/common/email/domain/interfaces/services/email.service.interface";
+import { IUserPreferenceRepository } from "../core/settings/domain/interfaces/repositories/userPreference.repository.interface";
+import { IUserContextRepository } from "../core/admin/domain/interfaces/repositories/usercontext.repository.interface";
 
 export const DI_SYMBOLS = {
   // Repositories
+  IUserPreferenceRepository: Symbol.for("IUserPreferenceRepository"),
+  IAppsRepository: Symbol.for("IAppsRepository"),
+  IResourcesRepository: Symbol.for("IResourcesRepository"),
+  IUserContextRepository: Symbol.for("IUserContextRepository"),
+  IPreferenceTemplatesRepository: Symbol.for("IPreferenceTemplatesRepository"),
+  IApiKeyRepository: Symbol.for("IApiKeyRepository"),
+  ISessionsRepository: Symbol.for("ISessionsRepository"),
+  IOrganizationsRepository: Symbol.for("IOrganizationsRepository"),
 
   // Services
   IAuthService: Symbol.for("IAuthService"),
@@ -25,16 +36,19 @@ export const DI_SYMBOLS = {
   IOrganizationsService: Symbol.for("IOrganizationsService"),
   IConsentsService: Symbol.for("IConsentsService"),
   IAgentAuthService: Symbol.for("IAgentAuthService"),
-  IAppsService: Symbol.for("IAppsService"),
-  IResourcesService: Symbol.for("IResourcesService"),
   IApiKeyService: Symbol.for("IApiKeyService"),
-  IPreferenceTemplatesService: Symbol.for("IPreferenceTemplatesService"),
-  IUserPreferenceService: Symbol.for("IUserPreferenceService"),
-  IUserContextService: Symbol.for("IUserContextService"),
 };
 
 export interface DI_RETURN_TYPES {
   // Repositories
+  IUserPreferenceRepository: IUserPreferenceRepository;
+  IAppsRepository: IAppsRepository;
+  IResourcesRepository: IResourcesRepository;
+  IUserContextRepository: IUserContextRepository;
+  IPreferenceTemplatesRepository: IPreferenceTemplatesRepository;
+  IApiKeyRepository: IApiKeyRepository;
+  ISessionsRepository: ISessionsRepository;
+  IOrganizationsRepository: IOrganizationsRepository;
 
   // Services
   IAuthService: IAuthService;
@@ -45,10 +59,5 @@ export interface DI_RETURN_TYPES {
   IOrganizationsService: IOrganizationsService;
   IConsentsService: IConsentsService;
   IAgentAuthService: IAgentAuthService;
-  IAppsService: IAppsService;
-  IResourcesService: IResourcesService;
   IApiKeyService: IApiKeyService;
-  IPreferenceTemplatesService: IPreferenceTemplatesService;
-  IUserPreferenceService: IUserPreferenceService;
-  IUserContextService: IUserContextService;
 }

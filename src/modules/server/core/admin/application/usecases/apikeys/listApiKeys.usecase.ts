@@ -7,5 +7,5 @@ import {
 export async function listApiKeysUseCase(
   query: TListApiKeysQuerySchema,
 ): Promise<TListApiKeysResponseSchema> {
-  return getInjection("IApiKeyService").listApiKeys(query);
+  return getInjection("IApiKeyRepository").listApiKeys(query);
 }

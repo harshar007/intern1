@@ -3,7 +3,7 @@ import {
   TUpdateUserPreferenceValidationSchema,
 } from "@/modules/entities/schemas/settings/preference/preference.schema";
 
-export interface IUserPreferenceService {
+export interface IUserPreferenceRepository {
   getUserPreference(userId: string): Promise<TUserPreferenceSchema | null>;
   upsertUserPreference(
     payload: TUpdateUserPreferenceValidationSchema,

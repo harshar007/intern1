@@ -16,7 +16,7 @@
  */
 
 import { randomUUID } from "crypto";
-import { IOAuthClientService } from "@/modules/server/core/admin/domain/interfaces/oauthclient.service.interface";
+import { IOAuthClientService } from "@/modules/server/core/admin/domain/interfaces/services/oauthclient.service.interface";
 import { TCreateOAuthClientPayload } from "@/modules/entities/types/admin/oauthclient.type";
 import {
   TGetOAuthClientsResponseDtoSchema,

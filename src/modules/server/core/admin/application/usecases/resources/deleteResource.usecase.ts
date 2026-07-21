@@ -4,6 +4,6 @@ import { getInjection } from "@/modules/server/di/container";
 export async function deleteResourceUseCase(
   payload: TDeleteResourceValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IResourcesService");
-  return await service.deleteResource(payload);
+  const repository = getInjection("IResourcesRepository");
+  return await repository.deleteResource(payload);
 }

@@ -5,7 +5,7 @@ import {
   TSetUserContextValidationSchema,
 } from "@/modules/entities/schemas/admin/user-context/user-context.schema";
 
-export interface IUserContextService {
+export interface IUserContextRepository {
   listUserContexts(): Promise<TListUserContextsResponseSchema>;
   getUserOrgMemberships(userId: string): Promise<TGetUserOrgMembershipsResponseSchema>;
   getOrgRolesForContext(organizationId: string): Promise<TGetOrgRolesForContextResponseSchema>;

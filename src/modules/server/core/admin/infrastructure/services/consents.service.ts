@@ -10,7 +10,7 @@
 import { randomUUID } from "crypto";
 import { auth } from "@/modules/server/auth-provider/auth";
 import { headers } from "next/headers";
-import { IConsentsService } from "../../domain/interfaces/consents.service.interface";
+import { IConsentsService } from "../../domain/interfaces/services/consents.service.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { mapBetterAuthError } from "@/modules/server/shared/errors/mappers/mapBetterAuthError";
 import {

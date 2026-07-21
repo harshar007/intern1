@@ -2,6 +2,6 @@ import { TListPreferenceTemplatesResponseSchema } from "@/modules/entities/schem
 import { getInjection } from "@/modules/server/di/container";
 
 export async function getPreferenceTemplatesUseCase(): Promise<TListPreferenceTemplatesResponseSchema> {
-  const service = getInjection("IPreferenceTemplatesService");
-  return await service.listPreferenceTemplates();
+  const repository = getInjection("IPreferenceTemplatesRepository");
+  return await repository.listPreferenceTemplates();
 }

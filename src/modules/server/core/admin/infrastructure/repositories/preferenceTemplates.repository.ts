@@ -1,5 +1,5 @@
 /**
- * @module admin/preferenceTemplates.service
+ * @module admin/preferenceTemplates.repository
  * @description Manages locale/format preference templates used to set default
  *              date, time, currency, and number formats for users.
  *              Enforces the "only one GLOBAL template" business rule.
@@ -10,7 +10,7 @@
 
 import { randomUUID } from "crypto";
 import { prisma } from "../../../../../../../prisma/db";
-import { IPreferenceTemplatesService } from "../../domain/interfaces/preferenceTemplates.service.interface";
+import { IPreferenceTemplatesRepository } from "../../domain/interfaces/repositories/preferenceTemplates.repository.interface";
 import { logOperation } from "@/modules/server/config/logger/log-operation";
 import { InfrastructureError } from "@/modules/server/shared/errors/infrastructureError";
 import { ApplicationError } from "@/modules/server/shared/errors/applicationError";
@@ -24,13 +24,13 @@ import {
   ListPreferenceTemplatesResponseSchema,
 } from "@/modules/entities/schemas/admin/preference-templates/preference-template.schema";
 
-export class PreferenceTemplatesService implements IPreferenceTemplatesService {
+export class PreferenceTemplatesRepository implements IPreferenceTemplatesRepository {
   async listPreferenceTemplates(): Promise<TListPreferenceTemplatesResponseSchema> {
     const startTimeMs = Date.now();
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "PreferenceTemplatesService.listPreferenceTemplates",
+      name: "PreferenceTemplatesRepository.listPreferenceTemplates",
       startTimeMs,
       context: { operationId },
     });
@@ -47,7 +47,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       });
 
       logOperation("success", {
-        name: "PreferenceTemplatesService.listPreferenceTemplates",
+        name: "PreferenceTemplatesRepository.listPreferenceTemplates",
         startTimeMs,
         data,
         context: { operationId },
@@ -56,7 +56,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "PreferenceTemplatesService.listPreferenceTemplates",
+        name: "PreferenceTemplatesRepository.listPreferenceTemplates",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -75,7 +75,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "PreferenceTemplatesService.createPreferenceTemplate",
+      name: "PreferenceTemplatesRepository.createPreferenceTemplate",
       startTimeMs,
       context: { operationId, scope: payload.scope },
     });
@@ -110,7 +110,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       const data = await PreferenceTemplateSchema.parseAsync(row);
 
       logOperation("success", {
-        name: "PreferenceTemplatesService.createPreferenceTemplate",
+        name: "PreferenceTemplatesRepository.createPreferenceTemplate",
         startTimeMs,
         data,
         context: { operationId },
@@ -119,7 +119,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "PreferenceTemplatesService.createPreferenceTemplate",
+        name: "PreferenceTemplatesRepository.createPreferenceTemplate",
         startTimeMs,
         err: error,
         context: { operationId },
@@ -140,7 +140,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
     const { id, ...fields } = payload;
 
     logOperation("start", {
-      name: "PreferenceTemplatesService.updatePreferenceTemplate",
+      name: "PreferenceTemplatesRepository.updatePreferenceTemplate",
       startTimeMs,
       context: { operationId, id },
     });
@@ -175,7 +175,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       const data = await PreferenceTemplateSchema.parseAsync(row);
 
       logOperation("success", {
-        name: "PreferenceTemplatesService.updatePreferenceTemplate",
+        name: "PreferenceTemplatesRepository.updatePreferenceTemplate",
         startTimeMs,
         data,
         context: { operationId, id },
@@ -184,7 +184,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       return data;
     } catch (error) {
       logOperation("error", {
-        name: "PreferenceTemplatesService.updatePreferenceTemplate",
+        name: "PreferenceTemplatesRepository.updatePreferenceTemplate",
         startTimeMs,
         err: error,
         context: { operationId, id },
@@ -204,7 +204,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
     const operationId = randomUUID();
 
     logOperation("start", {
-      name: "PreferenceTemplatesService.deletePreferenceTemplate",
+      name: "PreferenceTemplatesRepository.deletePreferenceTemplate",
       startTimeMs,
       context: { operationId, id: payload.id },
     });
@@ -213,7 +213,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       await prisma.preferenceTemplate.delete({ where: { id: payload.id } });
 
       logOperation("success", {
-        name: "PreferenceTemplatesService.deletePreferenceTemplate",
+        name: "PreferenceTemplatesRepository.deletePreferenceTemplate",
         startTimeMs,
         data: { success: true },
         context: { operationId, id: payload.id },
@@ -222,7 +222,7 @@ export class PreferenceTemplatesService implements IPreferenceTemplatesService {
       return { success: true };
     } catch (error) {
       logOperation("error", {
-        name: "PreferenceTemplatesService.deletePreferenceTemplate",
+        name: "PreferenceTemplatesRepository.deletePreferenceTemplate",
         startTimeMs,
         err: error,
         context: { operationId, id: payload.id },

@@ -6,6 +6,6 @@ import { getInjection } from "@/modules/server/di/container";
 export async function deletePreferenceTemplateUseCase(
   payload: TDeletePreferenceTemplateValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IPreferenceTemplatesService");
-  return await service.deletePreferenceTemplate(payload);
+  const repository = getInjection("IPreferenceTemplatesRepository");
+  return await repository.deletePreferenceTemplate(payload);
 }

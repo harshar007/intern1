@@ -4,6 +4,6 @@ import { TSetUserContextValidationSchema } from "@/modules/entities/schemas/admi
 export async function setUserContextUseCase(
   payload: TSetUserContextValidationSchema,
 ): Promise<{ success: boolean }> {
-  const service = getInjection("IUserContextService");
-  return service.setUserContext(payload);
+  const repository = getInjection("IUserContextRepository");
+  return repository.setUserContext(payload);
 }
