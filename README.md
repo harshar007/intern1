@@ -121,23 +121,34 @@ The app runs at `http://localhost:5001` by default. The admin dashboard is at `/
 
 ```
 src/
-├── app/                    # Next.js App Router — routing and pages only
-│   └── [locale]/admin/     # Admin dashboard pages (users, oauth-clients, sessions, ...)
+├── app/                        # Next.js App Router — routing and pages only
+│   ├── [locale]/
+│   │   ├── admin/               # Admin dashboard pages (users, oauth-clients, sessions, ...)
+│   │   ├── auth/                 # Sign-in, sign-up, 2FA, magic link, password reset, consent
+│   │   └── settings/              # End-user preference + security settings
+│   └── api/                        # Better Auth catch-all, internal + misc REST endpoints
+│
 ├── modules/
-│   ├── entities/           # Shared Zod schemas, types, enums — zero framework imports
+│   ├── entities/                # Shared Zod schemas, types, enums — zero framework imports
 │   ├── server/
-│   │   ├── auth-provider/  # Better Auth instance + plugin configuration
-│   │   ├── core/admin/     # Clean Architecture layers per feature (domain → application → infrastructure → interface-adapters)
-│   │   ├── di/              # Dependency injection container + module registrations
-│   │   ├── presentation/    # ZSA server actions
-│   │   └── shared/          # requireRole, error mappers
+│   │   ├── auth-provider/        # Better Auth instance + plugin configuration
+│   │   ├── core/                  # Clean Architecture layers, one folder per bounded domain
+│   │   │   ├── admin/               #   11 admin-dashboard features (domain → application → infrastructure → interface-adapters)
+│   │   │   ├── auth/                  #   sign-in/up, 2FA, session flows
+│   │   │   ├── settings/                #   end-user preferences
+│   │   │   └── common/email/              #   outbound email sending
+│   │   ├── di/                     # Dependency injection container + module registrations
+│   │   ├── presentation/            # ZSA server actions
+│   │   └── shared/                   # requireRole, error mappers
 │   └── client/
-│       ├── admin/           # Admin UI: stores, forms, modals, tables, providers
-│       └── shared/           # Shared UI components
-└── components/               # Global shadcn/ui components
+│       ├── admin/                  # Admin UI: stores, forms, modals, tables, providers
+│       ├── auth/                    # Auth UI: sign-in/up, 2FA, device flow
+│       ├── settings/                 # End-user preference + security UI
+│       └── shared/                    # Shared UI components
+└── components/                          # Global shadcn/ui components
 ```
 
-See [`CLAUDE.md`](./CLAUDE.md) for the full directory tree and per-layer responsibilities.
+Within `core/<domain>`, infrastructure splits into **Services** (wrap an external API, e.g. Better Auth's `auth.api.*` or SMTP) and **Repositories** (direct Prisma access) — a feature gets whichever it needs, or both. See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full directory tree, the Services-vs-Repositories rationale, a per-feature breakdown, and an end-to-end request walkthrough.
 
 ## 🏗 Architecture
 
@@ -145,15 +156,15 @@ See [`CLAUDE.md`](./CLAUDE.md) for the full directory tree and per-layer respons
 
 ```
 Entities (schemas/types)
-  └── Domain (interfaces)
+  └── Domain (interfaces: services/ + repositories/)
         └── Application (use cases)
-              └── Infrastructure (services → Better Auth API)
+              └── Infrastructure (services → Better Auth API / repositories → Prisma)
                     └── Interface Adapters (controllers)
                           └── Presentation (ZSA server actions)
                                 └── Client (React components)
 ```
 
-Every admin feature (users, OAuth clients, sessions, organizations, consents, agent-auth, apps, resources, API keys, preference templates, user context) follows this same layering. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the step-by-step guide to adding a new one.
+Every admin feature (users, OAuth clients, sessions, organizations, consents, agent-auth, apps, resources, API keys, preference templates, user context) follows this same layering. See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the deep dive and [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the step-by-step guide to adding a new feature.
 
 ## 🖥 Admin Dashboard
 
