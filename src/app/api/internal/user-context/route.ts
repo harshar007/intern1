@@ -121,20 +121,32 @@ export async function GET(req: NextRequest) {
 }
 
 // ------------------------------------------------------------------ //
-// GET /api/internal/user-context?lookup=true
+// POST /api/internal/user-context
 //
-// Lookup a user by email or username (without requiring the caller to
-// be that user). Useful for cross-service user resolution.
+// Internal service-to-service lookup only — requires a valid
+// x-internal-secret header matching process.env.INTERNAL_API_SECRET.
+// Looks up a user by email or username.
 //
-// Query params (at least one of email / username required):
+// Body (at least one of email / username required):
 //   email    — exact email match
 //   username — exact username match
 //   orgId    — when provided, user must be a member of this org
 // ------------------------------------------------------------------ //
 
 export async function POST(req: NextRequest) {
-  const auth_result = await resolveUserId(req);
-  if (auth_result instanceof NextResponse) return auth_result;
+  const internalSecret = process.env.INTERNAL_API_SECRET;
+  if (!internalSecret) {
+    console.error("Fatal: INTERNAL_API_SECRET is not configured.");
+    return NextResponse.json(
+      { error: "Internal secret not configured" },
+      { status: 500 },
+    );
+  }
+
+  const authHeader = req.headers.get("x-internal-secret");
+  if (authHeader !== internalSecret) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const body = await req.json().catch(() => null);
 
