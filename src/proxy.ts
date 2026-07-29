@@ -85,10 +85,8 @@ export async function proxy(req: NextRequest) {
    */
   if (pathname.startsWith("/api")) {
     const requestOrigin = req.headers.get("origin");
-    console.log({ requestOrigin });
     if (requestOrigin) {
       const allowedOrigins = await getAllowedOrigins(baseUrl);
-      console.log({ allowedOrigins });
       if (allowedOrigins.has(requestOrigin)) {
         // Preflight
         if (req.method === "OPTIONS") {
