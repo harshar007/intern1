@@ -27,8 +27,6 @@ import { routing } from "./i18n/routing";
 const intlMiddleware = createMiddleware(routing);
 
 // Matches /[locale]/admin and /[locale]/admin/* — locale segment is one or more non-slash chars
-const ADMIN_PATTERN = /^\/[^/]+\/admin(\/|$)/;
-const baseUrl = process.env.INTERNAL_URL || "https://iam.drgodly.com";
 // ---------------------------------------------------------------------------
 // Dynamic CORS origins — sourced from OAuth client redirect URIs in the DB.
 // Middleware runs in Edge Runtime (no Prisma), so we fetch from an internal
@@ -74,8 +72,11 @@ function buildCorsHeaders(origin: string): Record<string, string> {
   };
 }
 
+const ADMIN_PATTERN = /^\/[^/]+\/admin(\/|$)/;
+
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const baseUrl = process.env.INTERNAL_URL || process.env.BETTER_AUTH_URL || req.nextUrl.origin;
 
   /**
    * =========================
@@ -84,11 +85,8 @@ export async function proxy(req: NextRequest) {
    */
   if (pathname.startsWith("/api")) {
     const requestOrigin = req.headers.get("origin");
-    console.log({ requestOrigin });
     if (requestOrigin) {
       const allowedOrigins = await getAllowedOrigins(baseUrl);
-      console.log({ allowedOrigins });
-      allowedOrigins.add("https://test.drgodly.com");
       if (allowedOrigins.has(requestOrigin)) {
         // Preflight
         if (req.method === "OPTIONS") {
